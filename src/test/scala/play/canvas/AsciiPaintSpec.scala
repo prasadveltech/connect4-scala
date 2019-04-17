@@ -5,17 +5,17 @@ import org.scalatest.FunSuite
 
 class AsciiPaintSpec extends FunSuite {
 
-  val runner: ReplRunner = new ReplRunner(">", true, (out, in) => new AsciCanvas(out, in)).start()
+  val runner: ReplRunner = new ReplRunner(">", true, (out, in) => new AsciiCanvas(out, in)).start()
 
   test("Start a canvas") {
     runner
-      .enter("C 4 4",
-        " ----",
-        "|    |",
-        "|    |",
-        "|    |",
-        "|    |",
-        " ----")
+      .enter("C 20 4",
+        "----------------------",
+        "|                    |",
+        "|                    |",
+        "|                    |",
+        "|                    |",
+        "----------------------")
   }
 
 }
