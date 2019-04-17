@@ -2,7 +2,7 @@
 
 ## Spec
 
-The program should support the folloing commands:
+The program should support the following commands:
 
 C <width> <height> - Create a new canvas. 
     E.g. create "C 4 4" creates a canvas of dimensions 4 4
