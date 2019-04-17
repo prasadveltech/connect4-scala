@@ -20,8 +20,7 @@ abstract class CommandLineApp(outputStream: OutputStream, inputStream: InputStre
       if (line == null || line == "Q") return
 
       if (line != "") {
-        val message = processCommand(line)
-        out.write(message)
+        out.write(processCommand(line))
         out.write("\n")
         out.flush()
       }
