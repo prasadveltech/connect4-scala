@@ -2,7 +2,6 @@ package play.echo
 
 import github.westernsam.repltest.ReplRunner
 import org.scalatest.FunSuite
-import play.echo.Echo
 
 class EchoSpec extends FunSuite {
 

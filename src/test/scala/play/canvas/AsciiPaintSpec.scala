@@ -9,7 +9,7 @@ class AsciiPaintSpec extends FunSuite {
 
   test("Start a canvas") {
     runner
-      .enter("C 4",
+      .enter("C 4 4",
         " ----",
         "|    |",
         "|    |",
