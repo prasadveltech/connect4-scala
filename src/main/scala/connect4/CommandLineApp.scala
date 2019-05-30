@@ -1,4 +1,4 @@
-package play.util
+package connect4
 
 import java.io._
 
