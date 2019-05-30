@@ -1,39 +1,56 @@
-# Canvas
-
-## Spec
-
-The program should support the following commands:
-
-* C <width> <height> - Create a new canvas. 
-    E.g. create "C 20 4" creates a canvas of dimensions 20 4
+# connect4 scala
+Connect4 in Scala! For interviewing people who know some scala.
     
-* L <x1> <y1> <x2> <y2> - Draw a line of x's from x1,y1 to x2,y2. Only straight lines need be supported. 
-    E.g. L 1 2 6 2 draws a line from 1,2 to 6,2
     
-* R <x1> <y1> <x2> <y2> - Draw a rectangle of x's from x1,y1 to x2,y2.
-    E.g. R 16 1 20 3 creates a rectangle with corners at 16,1 and 20,3
-    
-## Example 
+## User Requirements
+
 ```
-> C 20 4
-----------------------
-|                    |
-|                    |
-|                    |
-|                    |
-----------------------
-> L 1 2 6 2
-----------------------  
-|                    |  
-|xxxxxx              |  
-|                    |  
-|                    |  
-----------------------  
-> R 16 1 20 3
----------------------- 
-|               xxxxx| 
-|xxxxxx         x   x| 
-|               xxxxx| 
-|                    | 
----------------------- 
+As a Player,
+I want to be able to select a column
+So that I can play the game
+```
+
+```
+As a Player,
+I want to have a different identifier for my pieces
+So that I know which pieces are mine
+```
+
+```
+As a Player,
+I want to be able to win by connecting 4 of my characters horizontally
+So that I can beat my opponent
+```
+
+```
+As a Player,
+I want to be able to win by connecting 4 of my characters vertically
+So that I can beat my opponent
+```
+
+```
+As a Player,
+I want to be able to win by connecting 4 of my characters diagonally
+So that I can destroy my opponent
+```
+
+```
+As a Games Master,
+I want to be able to only accept column numbers
+So that I know which column to insert the piece for that player
+```
+
+```
+As a Games Master,
+I do not want Players to be able to insert their pieces into columns which are already full
+So that I can keep play within bounds
+```
+
+```
+As a Games Master,
+When there's no more room to insert pieces and there's no winner
+I want to declare the game a draw
+```
+
+
 ```
