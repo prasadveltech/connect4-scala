@@ -9,8 +9,7 @@ class Board() {
     val columnNumbers = " 1 2 3 4 5 6 7"
     val horizontalSeparator = "---------------"
 
-    s"""|
-        |$columnNumbers
+    s"""|$columnNumbers
         |$horizontalSeparator
         |${board.map(_.mkString("|", "|", "|")).mkString("\n|")}
         |$horizontalSeparator""".stripMargin
