@@ -19,7 +19,8 @@ class Board() {
 }
 
 class Connect4(outputStream: OutputStream, inputStream: InputStream) extends CommandLineApp(outputStream, inputStream, "Connect 4") {
-  override def processCommand(line: String): String = "TODO"
+  val b: Board = new Board
+  override def processCommand(line: String): String = b.draw()
 }
 
 object Connect4 extends App {

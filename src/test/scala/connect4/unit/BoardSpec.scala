@@ -7,8 +7,7 @@ import org.scalatest.Matchers._
 class BoardSpec extends FunSpec {
 
   it("draws an empty board") {
-    val str = new Board().draw()
-    str shouldBe
+    new Board().draw() shouldBe
       """
         | 1 2 3 4 5 6 7
         |---------------
