@@ -1,13 +1,13 @@
 package connect4.state
 
-import cats.data.StateT
+import cats.data.{IndexedStateT, StateT}
 import cats.effect.ExitCase.Canceled
 import cats.effect.{ExitCode, IO, IOApp}
-import cats.syntax.all._
 import connect4.{Board, GameState, Player, Playing}
 
 import scala.io.StdIn
 import scala.util.matching.Regex
+import cats.syntax.all._
 
 object Connect4 extends IOApp {
 
@@ -20,7 +20,7 @@ object Connect4 extends IOApp {
 
   def swapPlayer(player: Player): Player = if (player == p1) p2 else p1
 
-  def printBoard: Game = for {
+  val printBoard: Game = for {
     st          <- StateT.get[IO, (Player, Board)]
     (_, board)  = st
     _           <- StateT.liftF(IO(println(board.draw())))
@@ -48,7 +48,7 @@ object Connect4 extends IOApp {
       }
     } yield c)
 
-  def gameState : StateT[IO, (Player, Board), GameState] = for {
+  val gameState : StateT[IO, (Player, Board), GameState] = for {
     st          <- StateT.get[IO, (Player, Board)]
     (_, board)  = st
   } yield board.gameState
