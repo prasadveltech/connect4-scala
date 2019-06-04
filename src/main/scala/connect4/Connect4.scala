@@ -1,6 +1,9 @@
 package connect4
 
-import java.io.{InputStream, OutputStream}
+sealed trait GameState
+case class Winner(player: Player) extends GameState
+case object Draw extends GameState
+case object Playing extends GameState
 
 class Board() {
   private val board: Array[Array[String]] = Array.fill(6, 7)(" ")
@@ -15,26 +18,12 @@ class Board() {
         |$horizontalSeparator""".stripMargin
   }
 
-  def play(column: Int, p: Player): Unit = () //TODO
-}
+  def play(p: Player, column: Int): Either[String, Board] = {
 
-class Connect4(outputStream: OutputStream, inputStream: InputStream) extends CommandLineApp(outputStream, inputStream, "Connect 4") {
-  private val b: Board = new Board
-  private val p1 = Player('X')
-  private val p2 = Player('0')
-
-  private var player = p1
-
-  override def processCommand(line: String): String = {
-    b.play(line.toInt, player)
-    val boardState = b.draw()
-    if (player == p1) player = p2 else player = p1
-    boardState
+    Right(this)
   }
+
+  def gameState: GameState = if (board.exists(_.exists(_ == " "))) Playing else Draw
 }
 
-object Connect4 extends App {
-  new Connect4(System.out, System.in).run()
-}
-
-case class Player(sign: Char)
+case class Player(sign: Char, name: String)

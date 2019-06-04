@@ -21,7 +21,7 @@ class BoardSpec extends FunSpec {
 
   it("player 1 chooses a column") {
     val board = new Board()
-    board.play(1, Player('X'))
+    board.play(Player('X', "sam"), 1)
     board.draw() shouldBe
       """ 1 2 3 4 5 6 7
         |---------------
