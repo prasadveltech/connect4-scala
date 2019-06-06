@@ -22,21 +22,20 @@ object Connect4 extends IOApp {
 
   def loop(board: Board, p: Player): IO[ExitCode] = IO.suspend {
 
-    def eval(command: String): IO[Any] = {
+    def eval(command: String): IO[ExitCode] = {
       def swapPlayer(p: Player): Player = if (p == p1) p2 else p1
-      if (command == null) IO.unit else dropCoin(board, p, command) match {
+      if (command == null) IO.pure(ExitCode.Success) else dropCoin(board, p, command) match {
         case Left(err)                           => IO(println(s"Err: $err"))  *> loop(board, p)
         case Right(b) if b.gameState == Playing  => IO(println(b.draw()))      *> loop(b, swapPlayer(p))
-        case Right(b)                            => IO(println(s"Game finished as ${b.gameState} : \n$b"))
+        case Right(b)                            => IO(println(s"Game finished as ${b.gameState} : \n$b")) *> IO.pure(ExitCode.Success)
       }
     }
 
     for {
       _     <- IO(print(s"> Choose a column ${p.name}: "))
       read  <- IO(StdIn.readLine)
-      _     <- eval(read)
-
-    } yield ExitCode.Success
+      ec    <- eval(read)
+    } yield ec
   }
 
   def run(args: List[String]): IO[ExitCode] =
