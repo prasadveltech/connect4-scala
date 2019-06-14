@@ -46,15 +46,13 @@ class Board(board: Columns = List.fill(7, 6)(" ")) {
     def winner(c: Char): List[String] => Boolean = _.mkString contains c.toString * 4
 
     def diags(): Columns = {
-      @tailrec def spanAll[T](l: List[T], acc: List[List[T]] = Nil)(pred: T => Boolean): List[List[T]] = {
-        val (left, right) = l.span(pred)
-        if (left.isEmpty)
-          if (right.isEmpty) acc else spanAll(right.tail, acc :+ right.take(1))(pred)
-        else spanAll(right.drop(1), acc :+ left ++ right.take(1))(pred)
+      @tailrec def spanAll[T](list: List[T], acc: List[List[T]] = Nil)(pred: T => Boolean): List[List[T]] = list.span(pred) match {
+        case (Nil, Nil) => acc
+        case (Nil, right) => spanAll(right.tail, acc :+ right.take(1))(pred)
+        case (left, right) => spanAll(right.drop(1), acc :+ left ++ right.take(1))(pred)
       }
 
       def diag(b: Columns): Columns = {
-
         val coordinates: Seq[(Int, Int)] = for {
           i <- 0 until b.size + b.head.size //width + dept
           j <- i to 0 by -1 //depth
@@ -62,9 +60,9 @@ class Board(board: Columns = List.fill(7, 6)(" ")) {
 
         val diagCoordinates = spanAll(coordinates.toList) { case (_, y) => y != 0 }
 
-        val inBounds = diagCoordinates.map(_.filter {case (x, y) => x < b.size && y < b.head.size})
+        val inBounds = diagCoordinates.map(_.filter { case (x, y) => x < b.size && y < b.head.size })
 
-        inBounds.map(_.map {case (x, y) => b(x)(y)})
+        inBounds.map(_.map { case (x, y) => b(x)(y) })
       }
 
       diag(board) ++ diag(board.map(_.reverse))
