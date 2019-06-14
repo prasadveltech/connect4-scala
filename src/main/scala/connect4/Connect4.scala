@@ -2,6 +2,8 @@ package connect4
 
 import connect4.Board.Columns
 
+import scala.annotation.tailrec
+
 sealed trait GameState
 case class Winner(player: Char) extends GameState
 case object Draw extends GameState
@@ -41,34 +43,46 @@ class Board(board: Columns = List.fill(7, 6)(" ")) {
 
 
   private def maybeWinner: Option[Char] = {
-    def winner(c: Char) : List[String] => Boolean = _.mkString contains c.toString * 4
+    def winner(c: Char): List[String] => Boolean = _.mkString contains c.toString * 4
 
     def diags(): Columns = {
-      /*
-            1 2 3
-            4 5 6
-            7 8 9
+      @tailrec def spanAll[T](l: List[T], acc: List[List[T]] = Nil)(pred: T => Boolean): List[List[T]] = {
+        val (left, right) = l.span(pred)
+        if (left.isEmpty)
+          if (right.isEmpty) acc else spanAll(right.tail, acc :+ right.take(1))(pred)
+        else spanAll(right.drop(1), acc :+ left ++ right.take(1))(pred)
+      }
 
-            (1), (4, 2), (7, 5, 3), (6, 8), 9
-       */
-      def diag(b: Columns) : Columns = ???
+      def diag(b: Columns): Columns = {
 
-      diag(board) ++ diag(board.transpose)
+        val coordinates: Seq[(Int, Int)] = for {
+          i <- 0 until b.size + b.head.size //width + dept
+          j <- i to 0 by -1 //depth
+        } yield (i - j, j)
+
+        val diagCoordinates = spanAll(coordinates.toList) { case (_, y) => y != 0 }
+
+        val inBounds = diagCoordinates.map(_.filter {case (x, y) => x < b.size && y < b.head.size})
+
+        inBounds.map(_.map {case (x, y) => b(x)(y)})
+      }
+
+      diag(board) ++ diag(board.map(_.reverse))
     }
 
-    if      (board.exists(winner('X')))           Some('X') //X col
-    else if (board.exists(winner('O')))           Some('O') //O col
+    if (board.exists(winner('X'))) Some('X') //X col
+    else if (board.exists(winner('O'))) Some('O') //O col
     else if (board.transpose.exists(winner('X'))) Some('X') //X row
     else if (board.transpose.exists(winner('O'))) Some('O') //O row
-//    else if (diags().exists(winner('X')))         Some('X') //diag x
-//    else if (diags().exists(winner('O')))         Some('O') //diag x
-    else                                          None
+    else if (diags().exists(winner('X'))) Some('X') //diag x
+    else if (diags().exists(winner('O'))) Some('O') //diag x
+    else None
   }
 
   def gameState: GameState = maybeWinner match {
-    case Some(s)                                      => Winner(s)
-    case None if !board.exists(_.exists(_ == " "))    => Draw
-    case _                                            => Playing
+    case Some(s) => Winner(s)
+    case None if !board.exists(_.exists(_ == " ")) => Draw
+    case _ => Playing
   }
 }
 
