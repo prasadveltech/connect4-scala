@@ -1,6 +1,5 @@
 package connect4
 
-import cats.effect.ExitCase.Canceled
 import cats.effect.{ExitCode, IO, IOApp}
 import cats.syntax.all._
 
@@ -36,10 +35,6 @@ object GameRunner extends IOApp {
     } yield exitCode
   }
 
-  def run(args: List[String]): IO[ExitCode] = loop(new Board(), p1).guaranteeCase {
-    case Canceled =>
-      IO(println("Interrupted: releasing and exiting!"))
-    case _ =>
-      IO(println("Normal exit!"))
-  }
+  def run(args: List[String]): IO[ExitCode] = loop(new Board(), p1)
+    .guaranteeCase(_ => IO(println("Bye!")))
 }
