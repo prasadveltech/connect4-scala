@@ -21,8 +21,7 @@ class BoardSpec extends FunSpec {
 
   it("player 1 chooses a column") {
     val board = new Board()
-    board.play(Player('X', "P1"), 1)
-    board.draw() shouldBe
+    board.play(Player('X', "P1"), 1).right.get.draw() shouldBe
       """ 1 2 3 4 5 6 7
         |---------------
         || | | | | | | |
@@ -30,6 +29,22 @@ class BoardSpec extends FunSpec {
         || | | | | | | |
         || | | | | | | |
         || | | | | | | |
+        ||X| | | | | | |
+        |---------------""".stripMargin
+  }
+
+  it("player 1 chooses a same column") {
+    val board = new Board()
+    board
+      .play(Player('X', "P1"), 1).right.get
+      .play(Player('O', "P2"), 1).right.get.draw() shouldBe
+      """ 1 2 3 4 5 6 7
+        |---------------
+        || | | | | | | |
+        || | | | | | | |
+        || | | | | | | |
+        || | | | | | | |
+        ||O| | | | | | |
         ||X| | | | | | |
         |---------------""".stripMargin
   }
